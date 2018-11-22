@@ -34,7 +34,12 @@ def signup(request):
                 new_user = User(password=password, username=username, last_name=last_name, email=email,
                                 first_name=first_name)
                 new_user.save()
-        return HttpResponseRedirect(redirect_to="/")
+            else:
+                HttpResponseRedirect(redirect_to="/signup")
+            return HttpResponseRedirect(redirect_to="/")
+    return render(request, "signup.html", {
+        "form": SignUpForm()
+    })
 
 
 def login(request):
