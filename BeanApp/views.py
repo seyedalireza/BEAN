@@ -95,7 +95,7 @@ def logout_(request):
 
 
 def edit_profile(request):
-    person = Person.objects.filter(user=request.user)
+    person = Person.objects.get(user=request.user)
     if person is None:
         person = Person(user=request.user)
         person.save()
@@ -109,14 +109,14 @@ def edit_profile(request):
             gender = form.cleaned_data.get('gender')
             person.bio = bio
             person.gender = gender
-            person.update()
-            return HttpResponseRedirect('/userInfo')  # change text
+            Person.objects.filter(user=request.user).update(bio = bio , gender = gender)
+            return HttpResponseRedirect('/userInfo', {"person": person, "user": request.user})  # change text
     return render(request, "EditProfile.html", {'form': form})
-    pass
+
 
 
 def user_info(request):
-    person = Person.objects.filter(user=request.user)
+    person = Person.objects.get(user=request.user)
     if person is None:
         person = Person(user=request.user)
         person.save()

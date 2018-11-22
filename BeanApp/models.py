@@ -21,5 +21,5 @@ class Comment(models.Model):
 class Person(models.Model):
     user = models.OneToOneField(to=User, on_delete=CASCADE)
     GENDER_TYPE = (("M", "MALE"), ("F", "FEMALE"))
-    gender = models.IntegerField(null=True , choices=GENDER_TYPE)
+    gender = models.CharField(null=True, choices=GENDER_TYPE , max_length=30)
     bio = models.TextField(null=True)
