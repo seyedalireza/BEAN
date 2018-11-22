@@ -9,44 +9,23 @@ from django.shortcuts import render, redirect
 
 from BeanApp.forms import SignUpForm, ContactForm
 
-def signup(request):
-    error = "nothing"
-    users = User.objects.all()
+
+def signup_req(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-        print("karafs")
         if form.is_valid():
-            form.save()  # todo change id
+            form.save()
             username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            password2 = form.cleaned_data.get('password2')
-            email = form.cleaned_data.get("email")
-            first_name = form.cleaned_data.get("first_name")
-            last_name = form.cleaned_data.get("last_name")
-            if users.get(username__exact=username):
-                error = "‫دارد‬ ‫وجود‬ ‫شده‬ ‫وارد‬ ‫کاربری‬ ‫نام‬ ‫با‬ ‫کاربری‬"
-            if password != password2:
-                error = "‫نیستند‬ ‫یکسان‬ ‫گذرواژه‬ ‫تکرار‬ ‫و‬ ‫گذرواژه‬"
-            if username != email:
-                error = "‫دارد‬ ‫وجود‬ ‫شده‬ ‫وارد‬ ‫ایمیل‬ ‫با‬ ‫کاربری‬‬"
-            if error == "nothing":
-                new_user = User(password=password, username=username, last_name=last_name, email=email,
-                                first_name=first_name)
-                new_user.save()
-            if error != "nothing":
-                return render(request, "signup.html", {
-                    "form": SignUpForm(),
-                    "error": error
-                })
-            return HttpResponseRedirect(redirect_to="/")
-        
-    return render(request, "signup.html", {
-        "form": SignUpForm(),
-        "error": error
-    })
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
 
 
-def login(request):
+def login_req(request):
     error = False
     if request.POST:
         username = request.POST.get("username")
