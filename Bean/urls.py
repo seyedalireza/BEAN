@@ -20,11 +20,11 @@ from BeanApp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.loadHomepage),
+    path('', views.load_homepage),
     path('signup', views.signup, name='signup'),
     path('login', views.loginWithForm),
     path('logout', views.logout_),
     path('contactUS', views.contact_view),
     path('userInfo', views.user_info),
-    path('editUser', views.edit_profial_form)
+    path('editUser', views.edit_profile_form)
 ]
