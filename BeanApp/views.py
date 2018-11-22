@@ -37,7 +37,7 @@ def signup(request):
             password = form.cleaned_data.get('password1')
             user = authenticate(request, username=username, password=password)
             login(request, user=user)
-            item = form.cleaned_data.get("type").replace("id_type_" , "")
+            item = form.cleaned_data.get("type").replace("id_type_", "")
             my_group = Group.objects.get(name=form.GROUP_CHOICES[int(item)][1])
             my_group.user_set.add(user)
             person = Person(user=user)
@@ -120,7 +120,7 @@ def user_info(request):
     if person is None:
         person = Person(user=request.user)
         person.save()
-    return render(request, "UserInfo.html", {"person": person})
+    return render(request, "UserInfo.html", {"person": person, "user": request.user})
 
 
 def load_homepage(request):
