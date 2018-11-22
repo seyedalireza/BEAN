@@ -21,6 +21,6 @@ from BeanApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.loadHomepage),
-    path('signup', views.signup_req, name='signup'),
-    path('login', views.login)
+    path('signup', views.signup, name='signup'),
+    path('login', views.loginWithForm)
 ]
