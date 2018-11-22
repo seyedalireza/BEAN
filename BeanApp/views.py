@@ -83,7 +83,10 @@ def logout_(request):
     return HttpResponseRedirect("/")
 
 
-
-
 def loadHomepage(request):
     return render(request, "HomePage.html")
+
+
+def loadSignup(request):
+
+    return None

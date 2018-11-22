@@ -6,12 +6,9 @@ from django.contrib.auth.models import User
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField( max_length=30, required=False, help_text='Optional' ,widget=forms.TextInput(attrs = {
-        "" : "id_first_name" , "name" : "نام"}))
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.',widget=forms.TextInput(attrs = {
-        "id" : "id_first_name" , "name" : "نام"}))
-    email = forms.EmailField(max_length=254 ,  id = "id_email", help_text='Required. Inform a valid email address.' , widget=forms.TextInput(attrs = {
-        "id" : "id_first_name" , "name" : "نام"}))
+    first_name = forms.CharField( max_length=30, required=False, help_text='Optional' ,widget=forms.TextInput(attrs = {'id': 'khar'}))
+    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
+    email = forms.EmailField(max_length=254 , help_text='Required. Inform a valid email address.')
 
     class Meta:
         model = User
