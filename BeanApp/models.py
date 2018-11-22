@@ -10,7 +10,6 @@ from django.db import models
 #     email = mode
 # ls.CharField(max_length=250 , min_length = 10 , null=True) #valid email
 from django.db.models import CASCADE
-from reportlab.platypus.doctemplate import onDrawStr
 
 
 class Comment(models.Model):
