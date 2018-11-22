@@ -93,7 +93,7 @@ def logout_(request):
     return HttpResponseRedirect("/")
 
 
-def edit_profile_form(request):
+def edit_profile(request):
     if request.method == 'GET':
         form = ChangeUserForm()
     else:

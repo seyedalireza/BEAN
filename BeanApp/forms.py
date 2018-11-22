@@ -26,8 +26,7 @@ class SignInForm(AuthenticationForm):
 
 class ContactForm(forms.Form):
     email = forms.EmailField()
-    subject = forms.CharField(required=True, max_length=250, min_length=10,
-                              widget=forms.TextInput(attrs={"id": "id_title"}))
+    subject = forms.CharField(required=True, widget=forms.TextInput(attrs={"id": "id_title"}))
     message = forms.CharField(required=True, max_length=250, min_length=10,
                               widget=forms.Textarea(attrs={"id": "id_text"}))
 
