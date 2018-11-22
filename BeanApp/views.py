@@ -12,7 +12,7 @@ from BeanApp.forms import SignUpForm, ContactForm, SignInForm
 
 
 def signup(request):
-    users = User.objects.all()
+    error = ""
     if request.method == 'GET':
         return render(request, "signup.html", {
             "form": SignUpForm(),
@@ -23,6 +23,8 @@ def signup(request):
         passwordTemp = form.data.get('password1')
         password2Temp = form.data.get('password2')
         emailTemp = form.data.get("email")
+        print(usernameTemp)
+        print(passwordTemp)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -31,22 +33,17 @@ def signup(request):
             email = form.cleaned_data.get("email")
             first_name = form.cleaned_data.get("first_name")
             last_name = form.cleaned_data.get("last_name")
-            form.save()
-            new_user = User(password=password, username=username, last_name=last_name, email=email,
-                            first_name=first_name)
-            new_user.save()
             authenticate(request, username=username, password=password)
             return HttpResponseRedirect(redirect_to="/")
-    error = ""
-    try:
-        if users.get(username=username):
-            error += "کاربری با نام کاربری وارد شده وجود دارد"
-    except Exception as s:
-        print(s)
-    if passwordTemp != password2Temp:
-        error += "گذرواژه و تکرار آن یکسان نیستند"
-    if users.get(email=emailTemp):
-        error += "کاربری با ایمیل داده شده وجود دارد"
+        try:
+            if User.objects.all().filter(username=usernameTemp).count() != 0:
+                error += "کاربری با نام کاربری وارد شده وجود دارد"
+        except Exception as s:
+            print(s)
+        if passwordTemp != password2Temp:
+            error += "گذرواژه و تکرار آن یکسان نیستند"
+        if User.objects.all().filter(email=emailTemp).count() != 0:
+            error += "کاربری با ایمیل داده شده وجود دارد"
     return render(request, "signup.html", {
         "form": SignUpForm(),
         "error": error
