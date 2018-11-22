@@ -28,8 +28,7 @@ def signup(request):
                 error = "‫نیستند‬ ‫یکسان‬ ‫گذرواژه‬ ‫تکرار‬ ‫و‬ ‫گذرواژه‬"
             if username != email:
                 error = "‫دارد‬ ‫وجود‬ ‫شده‬ ‫وارد‬ ‫ایمیل‬ ‫با‬ ‫کاربری‬‬"
-            # todo retuen render for signUppage if error is true for each if
-            if error == "":
+            if error == "nothing":
                 new_user = User(password=password, username=username, last_name=last_name, email=email,
                                 first_name=first_name)
                 new_user.save()
@@ -39,6 +38,7 @@ def signup(request):
                     "error": error
                 })
             return HttpResponseRedirect(redirect_to="/")
+        
     return render(request, "signup.html", {
         "form": SignUpForm(),
         "error": error
