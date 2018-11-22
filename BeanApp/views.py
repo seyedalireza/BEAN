@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 
 from BeanApp.forms import SignUpForm, ContactForm
@@ -16,7 +16,7 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()#todo change id
+            form.save()  # todo change id
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             password2 = form.cleaned_data.get('password2')
@@ -29,10 +29,10 @@ def signup(request):
                 error = True
             if username != email:
                 error = True
-            #todo retuen render for signUppage if error is true for each if
+            # todo retuen render for signUppage if error is true for each if
             if not error:
                 new_user = User(password=password, username=username, last_name=last_name, email=email,
-                            first_name=first_name)
+                                first_name=first_name)
                 new_user.save()
         return HttpResponseRedirect(redirect_to="/")
 
@@ -64,15 +64,21 @@ def contact_view(request):
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
+            send_message = message + "email:" + from_email
             try:
-                send_mail(subject, message, from_email, ['‫‪ostaduj@fastmail.com‬‬'])
+                send_mail(subject, send_message, from_email, ['‫‪ostaduj@fastmail.com‬‬'])
             except Exception as exec:
-                print("invalid ")
-            return redirect('success')#change text
+                print("invalid email")
+            return redirect('success')  # change text
     return render(request, "email.html", {'form': form})
 
 
+def logout_(request):
+    logout(request)
+    return HttpResponseRedirect("/")
+
+
+
+
 def loadHomepage(request):
-    return render(request, "HomePage.html", {
-        "error": False
-    })
+    return render(request, "HomePage.html")

@@ -11,10 +11,10 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('id_username', 'id_first_name', 'id_last_name', 'id_email', 'id_password_1', 'id_password_2',)
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
 
 class ContactForm(forms.Form):
-    from_email = forms.EmailField(required=False, max_length=250, min_length=10)
-    subject = forms.CharField(required=True, max_length=250, min_length=10)
-    message = forms.CharField(widget=forms.Textarea, required=True, max_length=250, min_length=10)
+    from_email = forms.EmailField(required=False, max_length=250 , min_length=10)
+    subject = forms.CharField(required=True, max_length=250 , min_length=10)
+    message = forms.CharField(widget=forms.Textarea, required=True, max_length=250 , min_length=10)
