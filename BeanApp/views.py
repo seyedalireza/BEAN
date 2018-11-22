@@ -14,6 +14,7 @@ def signup(request):
     users = User.objects.all()
     if request.method == 'POST':
         form = SignUpForm(request.POST)
+        print("karafs")
         if form.is_valid():
             form.save()  # todo change id
             username = form.cleaned_data.get('username')
