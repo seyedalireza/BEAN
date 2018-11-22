@@ -8,7 +8,13 @@
 <p id="id_first_name">{{ user.first_name }}</p>
 <p id="id_last_name">{{ user.last_name }}</p>
 <p id="id_username">{{ user.username }}</p>
-<a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>
+<a id='id_edit_profile' class="ui inverted button" href="/editUser">change infromation</a>
+{% if user.groups.all.0 == 'Teacher' %}
+"شما به عنوان استاد وارد شده اید"
+{% endif %}
+{% if user.groups.all.0 == 'Student' %}
+"شما به عنوان دانشجو وارد شده اید"
+{% endif %}
 </body>
 </html>
 {% block title %}

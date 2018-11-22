@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -21,27 +21,25 @@ def signup(request):
         })
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-        usernameTemp = form.data.get('username')
-        passwordTemp = form.data.get('password1')
-        password2Temp = form.data.get('password2')
-        emailTemp = form.data.get("email")
-        if User.objects.all().filter(username=usernameTemp).count() != 0:
+        username_temp = form.data.get('username')
+        password_temp = form.data.get('password1')
+        password2_temp = form.data.get('password2')
+        email_temp = form.data.get("email")
+        if User.objects.all().filter(username=username_temp).count() != 0:
             errList.append(ErrMsg.DUPLICATE_USER)
-        if passwordTemp != password2Temp:
+        if password_temp != password2_temp:
             errList.append(ErrMsg.PASSWORD_MISMATCH)
-        if User.objects.all().filter(email=emailTemp).count() != 0:
+        if User.objects.all().filter(email=email_temp).count() != 0:
             errList.append(ErrMsg.DUPLICATE_EMAIL)
         elif form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-
             password = form.cleaned_data.get('password1')
-            password2 = form.cleaned_data.get('password2')
-            email = form.cleaned_data.get("email")
-            first_name = form.cleaned_data.get("first_name")
-            last_name = form.cleaned_data.get("last_name")
-            use = authenticate(request, username=username, password=password)
-            login(request, user=use)
+            user = authenticate(request, username=username, password=password)
+            login(request, user=user)
+            item = form.cleaned_data.get("type").replace("id_type_" , "")
+            my_group = Group.objects.get(name=form.GROUP_CHOICES[int(item)][1])
+            my_group.user_set.add(user)
             return HttpResponseRedirect(redirect_to="/")
 
     return render(request, "signup.html", {
@@ -50,27 +48,7 @@ def signup(request):
     })
 
 
-def login_(request):
-    error = False
-    if request.POST:
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        print("login= user:", username)
-        print("login= pass:", password)
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect("/")
-            else:
-                error = True
-        error = True
-    return render(request, "LoginPage.html", {
-        "error": error
-    })
-
-
-def loginWithForm(request):
+def login_with_form(request):
     error = "nothing"
     users = User.objects.all()
     if request.method == 'POST':
