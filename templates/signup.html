@@ -17,5 +17,8 @@
       </p>
     {% endfor %}
     <button type="  submit">Sign up</button>
+  {% if error %}
+    <p style="color: red">{{ error }}</p>
+  {% endif %}
   </form>
 {% endblock %}
