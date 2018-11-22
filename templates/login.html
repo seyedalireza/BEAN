@@ -12,14 +12,12 @@
           <small style="color: grey">{{ field.help_text }}</small>
         {% endif %}
         {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
+          <p >{{ error }}</p>
         {% endfor %}
       </p>
     {% endfor %}
     <button id='id_submit' type="submit">Login</button>
-  {% if error %}
-    <p style="color: red">{{ error }}</p>
-  {% endif %}
-      <p style="color: red">{{ error }}</p>
+    <p >{{ error }}</p>
+      <p >{{ error }}</p>
   </form>
 {% endblock %}

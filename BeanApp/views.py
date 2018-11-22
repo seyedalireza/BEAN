@@ -23,17 +23,17 @@ def signup(request):
         passwordTemp = form.data.get('password1')
         password2Temp = form.data.get('password2')
         emailTemp = form.data.get("email")
-        print(usernameTemp)
-        print(passwordTemp)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
+            
             password = form.cleaned_data.get('password1')
             password2 = form.cleaned_data.get('password2')
             email = form.cleaned_data.get("email")
             first_name = form.cleaned_data.get("first_name")
             last_name = form.cleaned_data.get("last_name")
-            authenticate(request, username=username, password=password)
+            use = authenticate(request, username=username, password=password)
+            login(request , user=use)
             return HttpResponseRedirect(redirect_to="/")
         if User.objects.all().filter(username=usernameTemp).count() != 0:
                 error += "کاربری با نام کاربری وارد شده وجود دارد" "\n"
@@ -47,11 +47,13 @@ def signup(request):
     })
 
 
-def login(request):
+def login_(request):
     error = False
     if request.POST:
         username = request.POST.get("username")
         password = request.POST.get("password")
+        print("login= user:", username)
+        print("login= pass:", password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_active:
@@ -69,15 +71,17 @@ def loginWithForm(request):
     error = "nothing"
     users = User.objects.all()
     if request.method == 'POST':
-        form = SignInForm(request.POST)
+        form = SignInForm(data=request.POST or None)
         if form.is_valid():
-            form.save()  # todo change id
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
-            return HttpResponseRedirect(redirect_to="/")
+            login(request , user)
+            if user:
+                return HttpResponseRedirect(redirect_to="/")
+        error = "نام کاربری یا گذرواژه غلط است"
     return render(request, "signup.html", {
-    "form": SignInForm(),
+    "form": SignInForm(data=request.POST or None),
     "error": error
 })
 
