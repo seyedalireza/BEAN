@@ -18,5 +18,7 @@
     {% endfor %}
     <button id="id_submit" type="submit">Sign up</button>
   </form>
-    <p style="color: red">{{ error }}</p>
+    {% for err in errList %}
+        <p style="color: red">{{ err }}</p>
+    {% endfor %}
 {% endblock %}
