@@ -1,15 +1,17 @@
 {% extends 'Base.html' %}
 
 {% block content %}
-    <p id="id_first_name">{{ user.first_name }}</p>
-    <p id="id_last_name">{{ user.last_name }}</p>
-    <p id="id_username">{{ user.username }}</p>
+    <p id="id_first_name">{{ person.user.first_name }}</p>
+    <p id="id_last_name">{{ person.user.last_name }}</p>
+    <p id="id_username">{{ person.user.username }}</p>
+    <p id="id_gender">مرد/زن  {{ person.gender }}</p>
+    <p id="id_bio">{{ person.bio }}</p>
     <a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>
     <p>
-        {% if user.groups.all.0.name == 'Teacher' %}
+        {% if person.user.groups.all.0.name == 'Teacher' %}
             شما به عنوان استاد وارد شده اید
         {% endif %}
-        {% if user.groups.all.0.name == 'Student' %}
+        {% if person.user.groups.all.0.name == 'Student' %}
             شما به عنوان دانشجو وارد شده اید
         {% endif %}
     </p>

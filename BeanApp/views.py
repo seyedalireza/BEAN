@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 
 from BeanApp.errors import ErrMsg
 from BeanApp.forms import SignUpForm, ContactForm, SignInForm, ChangeUserForm
-from BeanApp.models import Comment
+from BeanApp.models import Comment, Person
 
 
 def signup(request):
@@ -40,6 +40,8 @@ def signup(request):
             item = form.cleaned_data.get("type").replace("id_type_" , "")
             my_group = Group.objects.get(name=form.GROUP_CHOICES[int(item)][1])
             my_group.user_set.add(user)
+            person = Person(user=user)
+            person.save()
             return HttpResponseRedirect(redirect_to="/")
 
     return render(request, "signup.html", {
@@ -50,7 +52,6 @@ def signup(request):
 
 def login_with_form(request):
     error = "nothing"
-    users = User.objects.all()
     if request.method == 'POST':
         form = SignInForm(data=request.POST or None)
         if form.is_valid():
@@ -94,19 +95,32 @@ def logout_(request):
 
 
 def edit_profile(request):
+    person = Person.objects.filter(user=request.user)
+    if person is None:
+        person = Person(user=request.user)
+        person.save()
     if request.method == 'GET':
         form = ChangeUserForm()
     else:
         form = ChangeUserForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            bio = form.cleaned_data.get('bio')
+            gender = form.cleaned_data.get('gender')
+            person.bio = bio
+            person.gender = gender
+            person.update()
             return HttpResponseRedirect('/userInfo')  # change text
     return render(request, "EditProfile.html", {'form': form})
     pass
 
 
 def user_info(request):
-    return render(request, "UserInfo.html", {"user": request.user})
+    person = Person.objects.filter(user=request.user)
+    if person is None:
+        person = Person(user=request.user)
+        person.save()
+    return render(request, "UserInfo.html", {"person": person})
 
 
 def load_homepage(request):

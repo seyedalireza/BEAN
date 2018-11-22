@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 
+from BeanApp.models import Person
+
 
 class SignUpForm(UserCreationForm):
     GROUP_CHOICES = [
@@ -30,7 +32,11 @@ class ContactForm(forms.Form):
     message = forms.CharField(required=True, max_length=250, min_length=10,
                               widget=forms.Textarea(attrs={"id": "id_text"}))
 
+
 class ChangeUserForm(UserChangeForm):
+    bio = forms.CharField(widget=forms.Textarea)
+    gender = forms.ChoiceField(choices=Person.GENDER_TYPE, widget=forms.Select)
+
     class Meta:
         model = User
         fields = ("first_name", 'last_name',)
