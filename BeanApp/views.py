@@ -12,7 +12,7 @@ from BeanApp.forms import SignUpForm, ContactForm, SignInForm
 
 
 def signup(request):
-    error = ""
+    errList = []
     if request.method == 'GET':
         return render(request, "signup.html", {
             "form": SignUpForm(),
@@ -36,14 +36,14 @@ def signup(request):
             login(request, user=use)
             return HttpResponseRedirect(redirect_to="/")
         if User.objects.all().filter(username=usernameTemp).count() != 0:
-            error += "کاربری با نام کاربری وارد شده وجود دارد" "\n"
+            errList.append("کاربری با نام کاربری وارد شده وجود دارد" "\n")
         if passwordTemp != password2Temp:
-            error += "گذرواژه و تکرار گذرواژه یکسان نیستند" "\n"
+            errList.append("گذرواژه و تکرار گذرواژه یکسان نیستند" "\n")
         if User.objects.all().filter(email=emailTemp).count() != 0:
-            error += "کاربری با ایمیل وارد شده وجود دارد" "\n"
+            errList.append("کاربری با ایمیل وارد شده وجود دارد" "\n")
     return render(request, "signup.html", {
         "form": SignUpForm(),
-        "error": error
+        "errList": errList
     })
 
 
