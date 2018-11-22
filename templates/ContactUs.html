@@ -1,23 +1,22 @@
 {% extends 'Base.html' %}
 
 {% block content %}
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.name }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p >{{ error }}</p>
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <p>
+                {{ field.name }}<br>
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </p>
         {% endfor %}
-      </p>
-    {% endfor %}
-    <button id='id_submit' type="submit">Login</button>
-    <p >{{ error }}</p>
-      <p >{{ error }}</p>
-  </form>
+        <button id='id_submit' type="submit">Login</button>
+        <p>{{ error }}</p>
+    </form>
 {% endblock %}

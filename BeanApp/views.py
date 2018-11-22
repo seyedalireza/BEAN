@@ -8,7 +8,8 @@ from django.shortcuts import render
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 
-from BeanApp.forms import SignUpForm, ContactForm, SignInForm
+from BeanApp.forms import SignUpForm, ContactForm, SignInForm, ChangeUserForm
+from BeanApp.models import Comment
 
 
 def signup(request):
@@ -23,7 +24,13 @@ def signup(request):
         passwordTemp = form.data.get('password1')
         password2Temp = form.data.get('password2')
         emailTemp = form.data.get("email")
-        if form.is_valid():
+        if User.objects.all().filter(username=usernameTemp).count() != 0:
+            errList.append("کاربری با نام کاربری وارد شده وجود دارد" "\n")
+        if passwordTemp != password2Temp:
+            errList.append("گذرواژه و تکرار گذرواژه یکسان نیستند" "\n")
+        if User.objects.all().filter(email=emailTemp).count() != 0:
+            errList.append("کاربری با ایمیل وارد شده وجود دارد" "\n")
+        elif form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
 
@@ -35,12 +42,7 @@ def signup(request):
             use = authenticate(request, username=username, password=password)
             login(request, user=use)
             return HttpResponseRedirect(redirect_to="/")
-        if User.objects.all().filter(username=usernameTemp).count() != 0:
-            errList.append("کاربری با نام کاربری وارد شده وجود دارد" "\n")
-        if passwordTemp != password2Temp:
-            errList.append("گذرواژه و تکرار گذرواژه یکسان نیستند" "\n")
-        if User.objects.all().filter(email=emailTemp).count() != 0:
-            errList.append("کاربری با ایمیل وارد شده وجود دارد" "\n")
+
     return render(request, "signup.html", {
         "form": SignUpForm(),
         "errList": errList
@@ -93,14 +95,17 @@ def contact_view(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             subject = form.cleaned_data['subject']
-            from_email = form.cleaned_data['from_email']
+            from_email = form.cleaned_data['email']
             message = form.cleaned_data['message']
             send_message = message + "email:" + from_email
+            comment = Comment(subject=subject, email=from_email, message=message)
+            comment.save()
             # try:
             #     send_mail(subject, send_message, from_email, ['‫‪ostaduj@fastmail.com‬‬'])
             # except Exception as exec:
             #     print("invalid email")
-            return HttpResponseRedirect('/')  # change text
+            error = "درخواست شما ثبت شد"
+            return render(request, "ContactUs.html", {'form': form, "error": error})  # change text
     return render(request, "ContactUs.html", {'form': form})
 
 
@@ -111,15 +116,10 @@ def logout_(request):
 
 def edit_profial_form(request):
     if request.method == 'GET':
-        form = UserChangeForm()
+        form = ChangeUserForm()
     else:
-        form = UserChangeForm(request.POST)
+        form = ChangeUserForm(request.POST, instance=request.user)
         if form.is_valid():
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            # user = request.user
-            # user.first_name = first_name
-            # user.last_name = last_name
             form.save()
             return HttpResponseRedirect('/userInfo')  # change text
     return render(request, "EditProfile.html", {'form': form})
