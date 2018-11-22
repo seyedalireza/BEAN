@@ -10,18 +10,29 @@ from BeanApp.forms import SignUpForm
 
 
 def signup(request):
+    error = False
+    users = User.objects.all()
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save()#todo change id
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+            password2 = form.cleaned_data.get('password2')
             email = form.cleaned_data.get("email")
             first_name = form.cleaned_data.get("first_name")
             last_name = form.cleaned_data.get("last_name")
-            new_user = User(password=password, username=username, last_name=last_name, email=email,
+            if users.get(username=username):
+                error = True
+            if password != password2:
+                error = True
+            if username != email:
+                error = True
+            #todo retuen render for signUppage if error is true for each if
+            if not error:
+                new_user = User(password=password, username=username, last_name=last_name, email=email,
                             first_name=first_name)
-            new_user.save()
+                new_user.save()
         return HttpResponseRedirect(redirect_to="/")
 
 
