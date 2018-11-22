@@ -35,11 +35,8 @@ def signup(request):
             last_name = form.cleaned_data.get("last_name")
             authenticate(request, username=username, password=password)
             return HttpResponseRedirect(redirect_to="/")
-        try:
-            if User.objects.all().filter(username=usernameTemp).count() != 0:
+        if User.objects.all().filter(username=usernameTemp).count() != 0:
                 error += "کاربری با نام کاربری وارد شده وجود دارد" "\n"
-        except Exception as s:
-            print(s)
         if passwordTemp != password2Temp:
             error += "گذرواژه و تکرار گذرواژه یکسان نیستند" "\n"
         if User.objects.all().filter(email=emailTemp).count() != 0:
