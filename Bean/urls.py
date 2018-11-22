@@ -26,5 +26,5 @@ urlpatterns = [
     path('logout', views.logout_),
     path('contactUS', views.contact_view),
     path('userInfo', views.user_info),
-    path('editUser', views.edit_profile_form)
+    path('editUser', views.edit_profile)
 ]

@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<p id="id_first_name">{{ user.first_name }}</p>
-<p id="id_last_name">{{ user.last_name }}</p>
-<p id="id_username">{{ user.username }}</p>
-<a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>
-</body>
-</html>
+{% extends 'Base.html' %}
+
+{% block content %}
+    <p id="id_first_name">{{ user.first_name }}</p>
+    <p id="id_last_name">{{ user.last_name }}</p>
+    <p id="id_username">{{ user.username }}</p>
+    <a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>
+{% endblock %}
