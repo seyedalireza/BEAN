@@ -39,13 +39,13 @@ def signup(request):
             return HttpResponseRedirect(redirect_to="/")
     error = ""
     try:
-        if users.get(username=usernameTemp):
+        if users.get(username=username):
             error += "کاربری با نام کاربری وارد شده وجود دارد"
     except Exception as s:
         print(s)
     if passwordTemp != password2Temp:
         error += "گذرواژه و تکرار آن یکسان نیستند"
-    if usernameTemp == emailTemp:
+    if users.get(email=emailTemp):
         error += "کاربری با ایمیل داده شده وجود دارد"
     return render(request, "signup.html", {
         "form": SignUpForm(),
