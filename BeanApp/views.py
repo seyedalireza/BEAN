@@ -9,9 +9,8 @@ from django.shortcuts import render, redirect
 
 from BeanApp.forms import SignUpForm, ContactForm
 
-
 def signup(request):
-    error = False
+    error = "nothing"
     users = User.objects.all()
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -24,21 +23,25 @@ def signup(request):
             first_name = form.cleaned_data.get("first_name")
             last_name = form.cleaned_data.get("last_name")
             if users.get(username=username):
-                error = True
+                error = "‫دارد‬ ‫وجود‬ ‫شده‬ ‫وارد‬ ‫کاربری‬ ‫نام‬ ‫با‬ ‫کاربری‬"
             if password != password2:
-                error = True
+                error = "‫نیستند‬ ‫یکسان‬ ‫گذرواژه‬ ‫تکرار‬ ‫و‬ ‫گذرواژه‬"
             if username != email:
-                error = True
+                error = "‫دارد‬ ‫وجود‬ ‫شده‬ ‫وارد‬ ‫ایمیل‬ ‫با‬ ‫کاربری‬‬"
             # todo retuen render for signUppage if error is true for each if
-            if not error:
+            if error == "":
                 new_user = User(password=password, username=username, last_name=last_name, email=email,
                                 first_name=first_name)
                 new_user.save()
-            else:
-                HttpResponseRedirect(redirect_to="/signup")
+            if error != "nothing":
+                return render(request, "signup.html", {
+                    "form": SignUpForm(),
+                    "error": error
+                })
             return HttpResponseRedirect(redirect_to="/")
     return render(request, "signup.html", {
-        "form": SignUpForm()
+        "form": SignUpForm(),
+        "error": error
     })
 
 
@@ -88,5 +91,4 @@ def loadHomepage(request):
 
 
 def loadSignup(request):
-
     return None

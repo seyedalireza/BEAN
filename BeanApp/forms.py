@@ -1,6 +1,6 @@
 from django import forms
 from django.conf.locale import id
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
@@ -14,6 +14,10 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
+class SignInForm(AuthenticationForm):
+    class Meta:
+        model = User
+        fields = ('username',  'password')
 
 class ContactForm(forms.Form):
     from_email = forms.EmailField(required=False, max_length=250 , min_length=10)
