@@ -70,3 +70,9 @@ def contact_view(request):
                 print("invalid ")
             return redirect('success')#change text
     return render(request, "email.html", {'form': form})
+
+
+def loadHomepage(request):
+    return render(request, "HomePage.html", {
+        "error": False
+    })
