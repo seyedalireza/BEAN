@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -15,3 +16,9 @@ class Comment(models.Model):
     email = models.EmailField()
     subject = models.CharField(null=False, max_length=250)
     message = models.CharField(null=False, max_length=250)
+
+
+class Person(User):
+    GENDER_TYPE = (("M", "MALE"), ("F", "FEMALE"))
+    gender = models.IntegerField(choices=GENDER_TYPE)
+    bio = models.TextField(default="")
