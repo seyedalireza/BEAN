@@ -61,7 +61,7 @@ def login_with_form(request):
             if user:
                 return HttpResponseRedirect(redirect_to="/")
         error = ErrMsg.WRONG_USERNAME_PASSWORD
-    return render(request, "signup.html", {
+    return render(request, "login.html", {
         "form": SignInForm(data=request.POST or None),
         "error": error
     })
