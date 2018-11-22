@@ -22,7 +22,7 @@ def signup(request):
             email = form.cleaned_data.get("email")
             first_name = form.cleaned_data.get("first_name")
             last_name = form.cleaned_data.get("last_name")
-            if users.get(username=username):
+            if users.get(username__exact=username):
                 error = "‫دارد‬ ‫وجود‬ ‫شده‬ ‫وارد‬ ‫کاربری‬ ‫نام‬ ‫با‬ ‫کاربری‬"
             if password != password2:
                 error = "‫نیستند‬ ‫یکسان‬ ‫گذرواژه‬ ‫تکرار‬ ‫و‬ ‫گذرواژه‬"
