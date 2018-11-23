@@ -29,5 +29,6 @@ urlpatterns = [
     path('contactUS/', views.contact_view),
     path('userInfo/', views.user_info),
     path('deleteMe/', views.remove_user),
-    path('editUser/', views.edit_profile)
+    path('editUser/', views.edit_profile),
+    path('reserve/', views.send_free_time)
 ] + static(settings.STATIC_URL, document_root=settings.SITE_ROOT)

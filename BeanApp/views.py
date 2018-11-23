@@ -1,5 +1,8 @@
+from sqlite3.dbapi2 import Time
+
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User, Group
+from django.core.handlers import exception
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -8,9 +11,10 @@ from django.shortcuts import render
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 
+from BeanApp import errors
 from BeanApp.errors import ErrMsg
-from BeanApp.forms import SignUpForm, ContactForm, SignInForm, ChangeUserForm
-from BeanApp.models import Comment, Person
+from BeanApp.forms import SignUpForm, ContactForm, SignInForm, ChangeUserForm, FreeTimeSaveForm
+from BeanApp.models import Comment, Person, TeacherFreeTime
 
 
 def signup(request):
@@ -117,19 +121,19 @@ def edit_profile(request):
     if request.method == 'GET':
         form = ChangeUserForm()
     else:
-        form = ChangeUserForm(request.POST, instance=request.user)
+        form = ChangeUserForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             bio = form.cleaned_data.get('bio')
             gender = form.cleaned_data.get('gender')
-            # picture = form.cleaned_data.get('picture')
+            picture = form.cleaned_data.get('picture')
             person.bio = bio
             person.gender = gender
             if request.user:
                 user = Person.objects.get(user=request.user)
                 user.bio = bio
                 user.gender = gender
-                # user.picture = picture
+                user.picture = picture
                 user.save()
             person.save()
             return HttpResponseRedirect('/userInfo', {"person": person, "user": request.user})  # change text
@@ -161,3 +165,38 @@ def remove_user(request):
     User.objects.filter(pk=request.user.pk).update(is_active=False)
     User.objects.filter(pk=request.user.pk).delete()
     return HttpResponseRedirect('/')
+
+
+def send_free_time(request):
+    person = get_Person_from_user(request)
+    if request.method == 'GET':
+        form = FreeTimeSaveForm()
+    else:
+        form = FreeTimeSaveForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            try:
+                if Time(form.data.get("start")) > Time(form.data.get("end")):
+                    form.errors["start"][0] = errors.ErrMsg.INVALID_TIME_ORDER
+                    return render(request, "signup.html", {'form': form})
+            except Exception as e3:
+                print(e3.__str__())
+            return HttpResponseRedirect('/')  # change text
+        else:
+            try:
+                if form.errors["start"][0] is not None:
+                    form.errors["start"][0] = errors.ErrMsg.WRONG_TIME_START
+            except Exception as e1:
+                print(e1.__str__())
+            try:
+                if form.errors["end"] is not None:
+                    form.errors["end"][0] = errors.ErrMsg.WRONG_TIME_END
+            except Exception as e2:
+                print(e2.__str__())
+            try:
+                if form.errors["date"][0] is not None:
+                    form.errors["date"] = errors.ErrMsg.WRONG_DATE
+            except Exception as e4:
+                print(e4.__str__())
+        # TeacherFreeTime.objects.filter(person=request.user.person, date=form.data.get("date"))
+    return render(request, "signup.html", {'form': form})

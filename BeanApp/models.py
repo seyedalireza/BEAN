@@ -34,7 +34,7 @@ class Person(models.Model):
 
 class TeacherFreeTime(models.Model):
     date = models.DateField()
-    startTime = models.TimeField()
-    endTime = models.TimeField()
-    capacity = models.IntegerField()
+    start = models.TimeField()
+    end = models.TimeField()
+    student_capacity = models.IntegerField()
     person = models.ForeignKey(to=Person , on_delete=CASCADE)

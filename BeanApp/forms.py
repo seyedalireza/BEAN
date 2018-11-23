@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 
-from BeanApp.models import Person
+from BeanApp.models import Person, TeacherFreeTime
 
 
 class SignUpForm(UserCreationForm):
@@ -15,10 +15,15 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
     type = forms.ChoiceField(choices=GROUP_CHOICES, widget=forms.RadioSelect())
 
-
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
+
+
+class FreeTimeSaveForm(forms.ModelForm):
+    class Meta:
+        model = TeacherFreeTime
+        fields = ('date', 'start', 'end', 'student_capacity',)
 
 
 class SignInForm(AuthenticationForm):
@@ -34,11 +39,11 @@ class ContactForm(forms.Form):
                               widget=forms.Textarea(attrs={"id": "id_text"}))
 
 
-
 class ChangeUserForm(UserChangeForm):
-    bio = forms.CharField(required=False,widget=forms.Textarea)
+    bio = forms.CharField(required=False, widget=forms.Textarea)
     gender = forms.MultipleChoiceField(choices=[('F', 'زن'), ('M', 'مرد')], widget=forms.SelectMultiple)
-    # picture = forms.ImageField(allow_empty_file=True , required=False)
+    picture = forms.ImageField(allow_empty_file=True, required=False)
+
     class Meta:
         model = User
         fields = ("first_name", 'last_name',)
