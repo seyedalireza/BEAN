@@ -37,7 +37,7 @@ class ContactForm(forms.Form):
 class ChangeUserForm(UserChangeForm):
     bio = forms.CharField(widget=forms.Textarea)
     gender = forms.ChoiceField(choices=Person.GENDER_TYPE, widget=forms.Select)
-    picture = forms.ImageField(allow_empty_file=True)
+    picture = forms.ImageField(allow_empty_file=True , required=False)
     class Meta:
         model = User
         fields = ("first_name", 'last_name',)

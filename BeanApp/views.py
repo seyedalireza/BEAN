@@ -35,12 +35,20 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            email = form.cleaned_data.get('email')
             user = authenticate(request, username=username, password=password)
             login(request, user=user)
             item = form.cleaned_data.get("type").replace("id_type_", "")
             my_group = Group.objects.get(name=form.GROUP_CHOICES[int(item)][1])
             my_group.user_set.add(user)
-            person = Person(user=user)
+            user = User.objects.get(username=username)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save()
+            person = Person(user=request.user)
             person.save()
             return HttpResponseRedirect(redirect_to="/")
 
@@ -107,7 +115,13 @@ def edit_profile(request):
             picture = form.cleaned_data.get('picture')
             person.bio = bio
             person.gender = gender
-            Person.objects.filter(user=request.user).update(bio=bio, gender=gender, picture=picture)
+            if request.user:
+                user = Person.objects.get(user=request.user)
+                user.bio = bio
+                user.gender = gender
+                user.picture = picture
+                user.save()
+            person.save()
             return HttpResponseRedirect('/userInfo', {"person": person, "user": request.user})  # change text
     return render(request, "EditProfile.html", {'form': form})
 
@@ -118,11 +132,14 @@ def user_info(request):
 
 
 def get_Person_from_user(request):
-    try:
-        person = Person.objects.get(user=request.user)
-    except Exception as e:
-        person = Person(user=request.user)
-        person.save()
+    if request.user.is_authenticated:
+        try:
+            person = request.user.person
+        except:
+            person = Person(user=request.user)
+            person.save()
+    else:
+        person = ""
     return person
 
 

@@ -14,10 +14,10 @@
                 صفحه اصلی
             </a>
             <a id='id_navbar_contact_us' class="ui inverted button" href="/contactUS">تماس با ما</a>
+            <a id='id_navbar_login' class="ui inverted button" href="/login">ورود</a>
+            <a id='id_navbar_signup' class="ui inverted button" href="/signup">ثبت نام</a>
             <div class="right item">
                 {% if not user.is_authenticated %}
-                    <a id='id_navbar_login' class="ui inverted button" href="/login">ورود</a>
-                    <a id='id_navbar_signup' class="ui inverted button" href="/signup">ثبت نام</a>
                 {% endif %}
                 {% if user.is_authenticated %}
                 {% endif %}
