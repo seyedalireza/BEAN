@@ -95,10 +95,7 @@ def logout_(request):
 
 
 def edit_profile(request):
-    person = Person.objects.get(user=request.user)
-    if person is None:
-        person = Person(user=request.user)
-        person.save()
+    person = get_Person_from_user(request)
     if request.method == 'GET':
         form = ChangeUserForm()
     else:
@@ -107,20 +104,26 @@ def edit_profile(request):
             form.save()
             bio = form.cleaned_data.get('bio')
             gender = form.cleaned_data.get('gender')
+            picture = form.cleaned_data.get('picture')
             person.bio = bio
             person.gender = gender
-            Person.objects.filter(user=request.user).update(bio = bio , gender = gender)
+            Person.objects.filter(user=request.user).update(bio=bio, gender=gender, picture=picture)
             return HttpResponseRedirect('/userInfo', {"person": person, "user": request.user})  # change text
     return render(request, "EditProfile.html", {'form': form})
 
 
-
 def user_info(request):
-    person = Person.objects.get(user=request.user)
-    if person is None:
+    person = get_Person_from_user(request)
+    return render(request, "UserInfo.html", {"person": person, "user": request.user})
+
+
+def get_Person_from_user(request):
+    try:
+        person = Person.objects.get(user=request.user)
+    except Exception as e:
         person = Person(user=request.user)
         person.save()
-    return render(request, "UserInfo.html", {"person": person, "user": request.user})
+    return person
 
 
 def load_homepage(request):

@@ -14,7 +14,7 @@
     </p>
     <p id="id_bio">{{ person.bio }}</p>
     <a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>
-    <p>
+    <p id="id_gender">
         {% if user.groups.all.0.name == 'Teacher' %}
             شما به عنوان استاد وارد شده اید
         {% endif %}
@@ -22,6 +22,7 @@
             شما به عنوان دانشجو وارد شده اید
         {% endif %}
     </p>
+    {{ person.image_tag }}
 {% endblock %}
 {% block title %}
     "profile"

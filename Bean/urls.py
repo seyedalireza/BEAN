@@ -13,9 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
+from Bean import settings
 from BeanApp import views
 
 urlpatterns = [
@@ -27,4 +29,4 @@ urlpatterns = [
     path('contactUS', views.contact_view),
     path('userInfo', views.user_info),
     path('editUser', views.edit_profile)
-]
+] + static(settings.STATIC_URL, document_root=settings.SITE_ROOT)
