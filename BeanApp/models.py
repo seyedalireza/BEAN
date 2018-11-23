@@ -31,3 +31,10 @@ class Person(models.Model):
         return mark_safe("<img src='/%s' style='max-width:250px; "
                          "height=auto'/>" % self.picture)
 
+
+class TeacherFreeTime(models.Model):
+    date = models.DateField()
+    startTime = models.TimeField()
+    endTime = models.TimeField()
+    capacity = models.IntegerField()
+    person = models.ForeignKey(to=Person , on_delete=CASCADE)
