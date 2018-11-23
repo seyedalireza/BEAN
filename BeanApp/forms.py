@@ -1,6 +1,8 @@
+import markdown as markdown
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
+from markdown import markdown
 
 from BeanApp.models import Person, TeacherFreeTime
 
@@ -39,11 +41,13 @@ class ContactForm(forms.Form):
                               widget=forms.Textarea(attrs={"id": "id_text"}))
 
 
-class ChangeUserForm(UserChangeForm):
-    bio = forms.CharField(required=False, widget=forms.Textarea)
-    gender = forms.MultipleChoiceField(choices=[('F', 'زن'), ('M', 'مرد')], widget=forms.SelectMultiple)
-    picture = forms.ImageField(allow_empty_file=True, required=False)
+class ChangeUserForm(forms.ModelForm):
+    # bio = forms.CharField(required=False, widget=forms.Textarea)
+    gender = forms.MultipleChoiceField(required=False, choices=[('F', 'زن'), ('M', 'مرد')], widget=forms.SelectMultiple)
+    picture = forms.FileField(allow_empty_file=True, required=False)
+    first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
+    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
 
     class Meta:
-        model = User
-        fields = ("first_name", 'last_name',)
+        model = Person
+        fields = ('bio',)

@@ -6,6 +6,8 @@ from django.core.handlers import exception
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.safestring import mark_safe
+from markdown import markdown
 
 # Create your views here.
 from django.contrib.auth import login, authenticate, logout
@@ -102,10 +104,10 @@ def contact_view(request):
             send_message = message + "email:" + from_email
             comment = Comment(subject=subject, email=from_email, message=message)
             comment.save()
-            # try:
-            #     send_mail(subject, send_message, from_email, ['‫‪ostaduj@fastmail.com‬‬'])
-            # except Exception as exec:
-            #     print("invalid email")
+            try:
+                send_mail(subject="sdafdsafasdf",message= "adsfghfsaf" ,from_email = "svafaiet@gmail.com",recipient_list = ['‫‪ostadju@fastmail.com‬‬','seidalirezahosseini@gmail.com' ])
+            except Exception as exec:
+                print("invalid email")
             error = ErrMsg.REQUEST_SENT
             return render(request, "ContactUs.html", {'form': form, "error": error})  # change text
     return render(request, "ContactUs.html", {'form': form})
@@ -126,14 +128,20 @@ def edit_profile(request):
             form.save()
             bio = form.cleaned_data.get('bio')
             gender = form.cleaned_data.get('gender')
-            picture = form.cleaned_data.get('picture')
+            # person.picture = request.FILES['picture']
+        
+            bio = markdown(bio)
             person.bio = bio
             person.gender = gender
             if request.user:
                 user = Person.objects.get(user=request.user)
                 user.bio = bio
                 user.gender = gender
-                user.picture = picture
+                first_name = form.cleaned_data.get('first_name')
+                last_name = form.cleaned_data.get('last_name')
+                person.user.first_name = first_name
+                person.user.last_name = last_name
+                person.user.save()
                 user.save()
             person.save()
             return HttpResponseRedirect('/userInfo', {"person": person, "user": request.user})  # change text
@@ -151,6 +159,7 @@ def get_Person_from_user(request):
             person = request.user.person
         except:
             person = Person(user=request.user)
+            person.bio = " "
             person.save()
     else:
         person = ""

@@ -25,7 +25,7 @@
         {% endif %}
 
     </p>
-    <p id="id_bio">{{ person.bio }}</p>
+    <div id="id_bio">{{ person.bio |safe }}</div>
     <a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>
     <a id='id_remove_user' class="ui inverted button" onclick='ask_for_delete()' href="/deleteMe">حذف من</a>
     <p id="id_gender">

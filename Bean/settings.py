@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'BeanApp.apps.BeanappConfig',
+    'BeanApp',
 ]
 
 MIDDLEWARE = [
@@ -120,3 +120,14 @@ SITE_ROOT = os.path.dirname(SITE_ROOT)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'eden101010hazard@gmail.com'
+EMAIL_HOST_PASSWORD = 'salam1324'

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+import markdown
 
 # Create your models here.
 
@@ -25,11 +26,19 @@ class Person(models.Model):
     GENDER_TYPE = (("M", "MALE"), ("F", "FEMALE"))
     gender = models.CharField(null=True, choices=GENDER_TYPE , max_length=30)
     bio = models.TextField(null=True)
-    picture = models.FileField(blank=True, null=True, upload_to="static/food_pics/")
+    picture = models.FileField(blank=True, null=True, upload_to="static/food_pics" )
 
     def image_tag(self):
-        return mark_safe("<img src='/%s' style='max-width:250px; "
-                         "height=auto'/>" % self.picture)
+        return mark_safe("<img id='id_picture' src='%s' style='max-width:250px; "
+                         "height=auto'/>" % (self.get_image_url()))
+
+    def get_image_url(self):
+        if self.picture is not None:
+            try:
+                return self.picture.url
+            except:
+                return ""
+        return ""
 
 
 class TeacherFreeTime(models.Model):
