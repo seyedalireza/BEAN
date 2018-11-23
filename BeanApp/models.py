@@ -10,6 +10,7 @@ from django.db import models
 #     email = mode
 # ls.CharField(max_length=250 , min_length = 10 , null=True) #valid email
 from django.db.models import CASCADE
+from django.db.models.signals import post_save
 from django.utils.safestring import mark_safe
 
 
@@ -20,9 +21,9 @@ class Comment(models.Model):
 
 
 class Person(models.Model):
-    user = models.OneToOneField(to=User, on_delete=CASCADE)
-    GENDER_TYPE = (("M", "MALE"), ("F", "FEMALE"),)
-    gender = models.CharField(null=True, choices=GENDER_TYPE, max_length=1)
+    user = models.OneToOneField(to=User, on_delete=CASCADE, primary_key=True)
+    GENDER_TYPE = (("M", "MALE"), ("F", "FEMALE"))
+    gender = models.CharField(null=True, choices=GENDER_TYPE , max_length=30)
     bio = models.TextField(null=True)
     picture = models.FileField(blank=True, null=True, upload_to="static/food_pics/")
 

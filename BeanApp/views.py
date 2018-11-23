@@ -25,20 +25,30 @@ def signup(request):
         password_temp = form.data.get('password1')
         password2_temp = form.data.get('password2')
         email_temp = form.data.get("email")
+        print(username_temp)
+        print(password_temp)
+        print(password2_temp)
+        print(email_temp)
         if User.objects.all().filter(username=username_temp).count() != 0:
             errList.append(ErrMsg.DUPLICATE_USER)
         if password_temp != password2_temp:
             errList.append(ErrMsg.PASSWORD_MISMATCH)
         if User.objects.all().filter(email=email_temp).count() != 0:
             errList.append(ErrMsg.DUPLICATE_EMAIL)
-        elif form.is_valid():
+        print(form.is_valid())
+        if form.is_valid():
             form.save()
+
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             first_name = form.cleaned_data.get('first_name')
             last_name = form.cleaned_data.get('last_name')
             email = form.cleaned_data.get('email')
+            print(username)
+            print(password)
+            print(email)
             user = authenticate(request, username=username, password=password)
+            print("khar1")
             login(request, user=user)
             item = form.cleaned_data.get("type").replace("id_type_", "")
             my_group = Group.objects.get(name=form.GROUP_CHOICES[int(item)][1])
@@ -145,3 +155,9 @@ def get_Person_from_user(request):
 
 def load_homepage(request):
     return render(request, "HomePage.html")
+
+
+def remove_user(request):
+    User.objects.filter(pk=request.user.pk).update(is_active=False)
+    User.objects.filter(pk=request.user.pk).delete()
+    return HttpResponseRedirect('/')

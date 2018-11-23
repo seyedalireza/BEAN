@@ -23,10 +23,11 @@ from BeanApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.load_homepage),
-    path('signup', views.signup, name='signup'),
-    path('login', views.login_with_form),
-    path('logout', views.logout_),
-    path('contactUS', views.contact_view),
-    path('userInfo', views.user_info),
-    path('editUser', views.edit_profile)
+    path('signup/', views.signup, name='signup'),
+    path('login/', views.login_with_form),
+    path('logout/', views.logout_),
+    path('contactUS/', views.contact_view),
+    path('userInfo/', views.user_info),
+    path('deleteMe/', views.remove_user),
+    path('editUser/', views.edit_profile)
 ] + static(settings.STATIC_URL, document_root=settings.SITE_ROOT)
