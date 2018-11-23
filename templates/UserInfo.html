@@ -1,5 +1,17 @@
 {% extends 'Base.html' %}
 
+{% block head %}
+    <script type="text/javascript">
+        function ask_for_delete() {
+            if (confirm("Do you really want to remove this user?")) {
+                window.location = '/deleteMe'
+            } else {
+                event.preventDefault()
+            }
+        }
+    </script>
+{% endblock %}
+
 {% block content %}
     <p id="id_first_name">{{ user.first_name }}</p>
     <p id="id_last_name">{{ user.last_name }}</p>
@@ -14,7 +26,7 @@
     </p>
     <p id="id_bio">{{ person.bio }}</p>
     <a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>
-    <a id='id_remove_user' class="ui inverted button" href="/deleteMe">حذف من</a>
+    <a id='id_remove_user' class="ui inverted button" onclick='ask_for_delete()' href="/deleteMe">حذف من</a>
     <p id="id_gender">
         {% if user.groups.all.0.name == 'Teacher' %}
             شما به عنوان استاد وارد شده اید
