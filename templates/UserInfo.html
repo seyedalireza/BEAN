@@ -5,12 +5,13 @@
     <p id="id_last_name">{{ user.last_name }}</p>
     <p id="id_username">{{ user.username }}</p>
     <p>
-        {% if person.gender == 'F' %}
+        {% if person.gender.2 == 'F' %}
             زن
         {% endif %}
-        {% if person.gender == 'M' %}
+        {% if person.gender.2 == 'M' %}
             مرد
         {% endif %}
+
     </p>
     <p id="id_bio">{{ person.bio }}</p>
     <a id='id_edit_profile' class="ui inverted button" href="/editUser">تغییر اطلاعات</a>

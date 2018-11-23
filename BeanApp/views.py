@@ -112,14 +112,14 @@ def edit_profile(request):
             form.save()
             bio = form.cleaned_data.get('bio')
             gender = form.cleaned_data.get('gender')
-            picture = form.cleaned_data.get('picture')
+            # picture = form.cleaned_data.get('picture')
             person.bio = bio
             person.gender = gender
             if request.user:
                 user = Person.objects.get(user=request.user)
                 user.bio = bio
                 user.gender = gender
-                user.picture = picture
+                # user.picture = picture
                 user.save()
             person.save()
             return HttpResponseRedirect('/userInfo', {"person": person, "user": request.user})  # change text

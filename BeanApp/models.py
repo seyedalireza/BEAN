@@ -21,8 +21,8 @@ class Comment(models.Model):
 
 class Person(models.Model):
     user = models.OneToOneField(to=User, on_delete=CASCADE)
-    GENDER_TYPE = (("M", "MALE"), ("F", "FEMALE"))
-    gender = models.CharField(null=True, choices=GENDER_TYPE , max_length=30)
+    GENDER_TYPE = (("M", "MALE"), ("F", "FEMALE"),)
+    gender = models.CharField(null=True, choices=GENDER_TYPE, max_length=1)
     bio = models.TextField(null=True)
     picture = models.FileField(blank=True, null=True, upload_to="static/food_pics/")
 
